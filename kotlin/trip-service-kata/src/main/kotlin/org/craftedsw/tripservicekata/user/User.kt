@@ -6,6 +6,7 @@ import java.util.*
 class User {
 
     private val _trips: MutableList<Trip> = ArrayList()
+
     val trips: List<Trip>
         get() = _trips
 
