@@ -14,6 +14,10 @@ class TripServiceTest {
   @Rule @JvmField
   val thrown = ExpectedException.none()
 
+  var loggedUser: User? = User()
+  val subjectUser = User()
+  val fakeTripList = ArrayList<Trip>()
+
   @Test
   fun assertIsWorking() {
     assertTrue(true)
@@ -22,55 +26,38 @@ class TripServiceTest {
   @Test
   fun noLoggedUserTestCase_shouldThrowsRelatedException() {
     thrown.expect(UserNotLoggedInException::class.java)
-
-    val aNullUser = null
-    val service = buildService(aNullUser, ArrayList())
-
-    service.getTripsByUser(User())
+    loggedUser = null
+    getTrips()
   }
 
   @Test
   fun notFriendsUsersWithoutTripsUseCase() {
-    val loggedUser = User()
-    val anotherUser = User()
-    val service = buildService(loggedUser, ArrayList())
-
-    val trips = service.getTripsByUser(anotherUser)
-
-    assertTrue(trips.isEmpty())
+    loggedUser = User()
+    assertTrue(getTrips().isEmpty())
   }
 
   @Test
   fun loggedUserFriendsOfOtherUsersWithoutTripsUseCase() {
-    val loggedUser = User()
-    val anotherUser = User()
-    val service = buildService(loggedUser, ArrayList())
-    loggedUser.addFriend(anotherUser)
-
-    val trips = service.getTripsByUser(anotherUser)
-
-    assertTrue(trips.isEmpty())
+    loggedUser!!.addFriend(subjectUser)
+    assertTrue(getTrips().isEmpty())
   }
 
   @Test
   fun otherUserFriendsOfLoggedUsersWithoutTripsUseCase() {
-    val loggedUser = User()
-    val anotherUser = User()
-    val service = buildService(loggedUser, ArrayList())
-    anotherUser.addFriend(loggedUser)
-    
-    val trips = service.getTripsByUser(anotherUser)
-
-    assertTrue(trips.isEmpty())
+    subjectUser.addFriend(loggedUser!!)
+    assertTrue(getTrips().isEmpty())
   }
 
-  private fun buildService(loggedUser: User?, tripList: ArrayList<Trip>): TripService {
-    val fakeTripRepository = FakeTripRepository(tripList)
-    return TripService(
+  private fun getTrips(): List<Trip> {
+    val fakeTripRepository = FakeTripRepository(fakeTripList)
+    val service = TripService(
             loggedUser = loggedUser,
             tripRepository = fakeTripRepository
     )
+
+    return service.getTripsByUser(subjectUser)
   }
+
 }
 
 class FakeTripRepository(val fakeTrips: List<Trip>) : TripRepository {
