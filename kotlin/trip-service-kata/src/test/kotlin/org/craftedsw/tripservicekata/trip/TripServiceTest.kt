@@ -7,6 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
 import java.util.*
+import java.util.Arrays.asList
 
 
 class TripServiceTest {
@@ -45,6 +46,13 @@ class TripServiceTest {
   @Test
   fun otherUserFriendsOfLoggedUsersWithoutTripsUseCase() {
     subjectUser.addFriend(loggedUser!!)
+    assertTrue(getTrips().isEmpty())
+  }
+
+  @Test
+  fun loggedUserFriendsOfOtherUsersWithTripsUseCase() {
+    loggedUser!!.addFriend(subjectUser)
+    fakeTripList.addAll(asList(Trip(), Trip()))
     assertTrue(getTrips().isEmpty())
   }
 
