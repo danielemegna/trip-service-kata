@@ -6,12 +6,12 @@ import java.util.*
 
 class TripService(val loggedUser: User?, val tripRepository: TripRepository) {
 
-    fun getTripsByUser(user: User): List<Trip> {
-        var loggedUser = loggedUser.let { it } ?: throw UserNotLoggedInException()
-        val userHasLoggedUserAsFriend = user.friends.contains(loggedUser)
+    fun getTripsByUser(subjectUser: User): List<Trip> {
+        val loggedUser = loggedUser.let { it } ?: throw UserNotLoggedInException()
+        val subjectUserHasLoggedUserAsFriend = subjectUser.friends.contains(loggedUser)
 
-        if (userHasLoggedUserAsFriend)
-            return tripRepository.findTripsFor(user)
+        if (subjectUserHasLoggedUserAsFriend)
+            return tripRepository.findTripsFor(subjectUser)
 
         return ArrayList()
     }
