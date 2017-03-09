@@ -39,26 +39,26 @@ class TripServiceTest {
   }
 
   @Test
-  fun loggedUserFriendsOfOtherUsersWithoutTripsUseCase() {
+  fun loggedUserFriendsOfSubjectUsersWithoutTripsUseCase() {
     loggedUser!!.addFriend(subjectUser)
     assertTrue(getTrips().isEmpty())
   }
 
   @Test
-  fun otherUserFriendsOfLoggedUsersWithoutTripsUseCase() {
+  fun subjectUserFriendsOfLoggedUsersWithoutTripsUseCase() {
     subjectUser.addFriend(loggedUser!!)
     assertTrue(getTrips().isEmpty())
   }
 
   @Test
-  fun loggedUserFriendsOfOtherUsersWithTripsUseCase() {
+  fun loggedUserFriendsOfSubjectUsersWithTripsUseCase() {
     loggedUser!!.addFriend(subjectUser)
     fakeTripList.addAll(asList(Trip(), Trip()))
     assertTrue(getTrips().isEmpty())
   }
 
   @Test
-  fun otherUserFriendsOfLoggedUsersWithTripsUseCase() {
+  fun subjectUserFriendsOfLoggedUsersWithTripsUseCase() {
     subjectUser.addFriend(loggedUser!!)
     fakeTripList.addAll(asList(Trip(), Trip()))
     assertEquals(fakeTripList, getTrips())
