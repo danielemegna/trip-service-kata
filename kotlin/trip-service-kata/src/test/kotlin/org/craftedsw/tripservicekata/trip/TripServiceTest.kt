@@ -2,6 +2,7 @@ package org.craftedsw.tripservicekata.trip
 
 import org.craftedsw.tripservicekata.exception.UserNotLoggedInException
 import org.craftedsw.tripservicekata.user.User
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -54,6 +55,13 @@ class TripServiceTest {
     loggedUser!!.addFriend(subjectUser)
     fakeTripList.addAll(asList(Trip(), Trip()))
     assertTrue(getTrips().isEmpty())
+  }
+
+  @Test
+  fun otherUserFriendsOfLoggedUsersWithTripsUseCase() {
+    subjectUser.addFriend(loggedUser!!)
+    fakeTripList.addAll(asList(Trip(), Trip()))
+    assertEquals(fakeTripList, getTrips())
   }
 
   private fun getTrips(): List<Trip> {
