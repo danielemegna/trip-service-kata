@@ -10,10 +10,9 @@ class TripService(val loggedUser: User?, val tripRepository: TripRepository) {
     fun getTripsByUser(user: User): List<Trip> {
         var loggedUser = loggedUser.let { it } ?: throw UserNotLoggedInException()
 
-        for (friend in user.friends) {
-            if (friend == loggedUser)
-                return tripRepository.findTripsFor(user)
-        }
+        if(user.friends.contains(loggedUser))
+            return tripRepository.findTripsFor(user)
+
         return ArrayList()
     }
 
